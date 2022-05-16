@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 import codecs
 import os
 
-version = "0.0.2.2.2"
+version = "0.0.3.0.0"
 
 description = "to play out beeping sounds to trigger audio alerts"
 
@@ -28,5 +28,6 @@ setup(
         ,  "Intended Audience :: End Users/Desktop"
         ,  "Programming Language :: Python :: 3"
         ,  "Operating System :: Microsoft :: Windows"
+        ,  "Operating System :: MacOS"
       ]
 )

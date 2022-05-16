@@ -1,16 +1,15 @@
 Metadata-Version: 2.1
 Name: bips
-Version: 0.0.2.2.2
+Version: 0.0.3.0.0
 Summary: to play out beeping sounds to trigger audio alerts
 Author: mose_tucker_0159
 Author-email: mose.tucker.0159@gmail.com
-License: UNKNOWN
 Keywords: python
-Platform: UNKNOWN
 Classifier: Development Status :: 1 - Planning
 Classifier: Intended Audience :: End Users/Desktop
 Classifier: Programming Language :: Python :: 3
 Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: MacOS
 Description-Content-Type: text/markdown
 License-File: LICENSE.txt
 
@@ -33,5 +32,3 @@ mose_tucker_0159 -- mose.tucker.0159@gmail.com
 
 ## License
 [MIT]( https://choosealicense.com/licenses/mit )
-
-

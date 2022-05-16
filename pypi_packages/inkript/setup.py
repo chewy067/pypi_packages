@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 import codecs
 import os
 
-version = "0.0.1.1"
+version = "0.0.2.0"
 
 description = "to create keys to encrypt and decrypt files"
 
@@ -24,9 +24,10 @@ setup(
       ]
     , keywords = [ "python" ]
     , classifiers = [
-             "Development Status :: 1 - Planning"
-            ,  "Intended Audience :: End Users/Desktop"
-            ,  "Programming Language :: Python :: 3"
-            ,  "Operating System :: Microsoft :: Windows"
+         "Development Status :: 1 - Planning"
+        , "Intended Audience :: End Users/Desktop"
+        , "Programming Language :: Python :: 3"
+        , "Operating System :: Microsoft :: Windows"
+        , "Operating System :: MacOS"
       ]
 )
