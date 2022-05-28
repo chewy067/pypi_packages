@@ -1,5 +1,4 @@
 from pysinewave import SineWave
-import winsound
 import time
 
 def base_beep( frequency, duration, pause = 0.3 ):
