@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 import codecs
 import os
 
-version = "0.0.1.9"
+version = "0.0.1.11"
 
 description = "to generate a log tracking mechanism that can be customised"
 

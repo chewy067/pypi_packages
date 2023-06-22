@@ -129,9 +129,14 @@ def log_subscript_start( tagging, print_comment ):
     print( "subscript started: " + tagging + ":-- " + print_comment )
 
 
-def log_subscript_finish( tagging, print_comment ):
+def log_subscript_finish( tagging, print_comment, with_beep = 0 ):
     logging.info( "subscript finished: " + tagging + ":-- " + print_comment )
     print( "subscript finished: " + tagging + ":-- " + print_comment )
+
+    if with_beep == 1:
+        bips.bip_notifs.done_status_beep( )
+    else:
+        pass
 
 
 def log_script_finish( with_beep = 1 ):
