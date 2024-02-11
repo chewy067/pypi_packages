@@ -2,9 +2,9 @@ from setuptools import setup, find_packages
 import codecs
 import os
 
-version = "0.0.1.11"
+version = "0.0.1.12"
 
-description = "to generate a log tracking mechanism that can be customised"
+description = "to generate a log tracking mechanism"
 
 with open( "README.md", "r" ) as f:
     long_description = f.read( )
@@ -19,9 +19,7 @@ setup(
     , long_description = long_description
     , long_description_content_type = "text/markdown"
     , packages = find_packages( )
-    , install_requires = [
-         "bips"
-      ]
+    , install_requires = [ ]
     , keywords = [ "python" ]
     , classifiers = [
              "Development Status :: 1 - Planning"

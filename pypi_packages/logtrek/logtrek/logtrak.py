@@ -7,14 +7,54 @@ from pathlib import Path
 import time
 import datetime
 import csv
-import bips
 import subprocess
+from pysinewave import SineWave
 
 
 
 ##=================================
 ##  INSERT CODE HERE
 ##=================================
+
+##<< beeping notifications ===================
+def base_beep( frequency, duration, pause = 0.3 ):
+    sinewave = SineWave( pitch = frequency )
+    sinewave.play( )
+    time.sleep( duration )
+    sinewave.stop( )
+
+    time.sleep( pause )
+
+
+def error_beep( frequency, duration ):
+    for i in range( 0, 7 ):
+        # base_beep( 12, 0.15 )
+        base_beep( frequency, duration )
+
+
+def done_status_beep( first_freq, second_freq, duration ):
+    for i in range( 0, 2 ):
+        # base_beep( 5, 0.15 )
+        base_beep( first_freq, duration )
+
+    time.sleep( 0.1 )
+
+    for i in range( 0, 2 ):
+        # base_beep( 10, 0.15 )
+        base_beep( second_freq, duration )
+
+
+def success_beep( frequency, duration):
+    for i in range( 0, 1 ):
+        # base_beep( 10, 1 )
+        base_beep( frequency, 1 )
+
+    time.sleep( 0.1 )
+
+    for i in range( 0, 2 ):
+        # base_beep( 10, 0.15 )
+        base_beep( frequency, duration )
+##>> beeping notifications ===================
 
 
 ##<< start log tracking ===================
@@ -134,7 +174,7 @@ def log_subscript_finish( tagging, print_comment, with_beep = 0 ):
     print( "subscript finished: " + tagging + ":-- " + print_comment )
 
     if with_beep == 1:
-        bips.bip_notifs.done_status_beep( )
+        done_status_beep( 5, 10, 0.15 )
     else:
         pass
 
@@ -144,7 +184,7 @@ def log_script_finish( with_beep = 1 ):
     logging.info( print_comment )
 
     if with_beep == 1:
-        bips.bip_notifs.done_status_beep( )
+        success_beep( 10, 0.15 )
     else:
         pass
 
@@ -153,7 +193,7 @@ def log_script_finish( with_beep = 1 ):
 
 def log_exception( exception, with_beep = 1 ):
     if with_beep == 1:
-        bips.bip_notifs.error_beep( )
+        error_beep( 12, 0.15 )
     else:
         pass
 
