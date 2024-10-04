@@ -3,6 +3,7 @@ import os
 import random
 import string
 import logging
+from logging.handlers import RotatingFileHandler
 from pathlib import Path
 import time
 import datetime
@@ -160,25 +161,37 @@ def log_setup( log_folder, log_file_name, is_log_update = 1, is_log_update_1 = 0
         pass
 
 
-def log_setup_v2( log_folder, log_file_name, max_size = 1024 * 1024, is_log_update = 1, is_log_update_1 = 0, is_log_update_2 = 0 ):
+def log_setup_v2(
+         log_folder         : str
+        , log_file_name     : str
+        , max_size          : float   = 1024 * 1024
+        , num_of_backups    : int     = 50
+        , is_log_update     : int     = 1
+        , is_debug          : bool    = True
+        , is_log_update_1   : int     = 0
+        , is_log_update_2   : int     = 0
+    ):
     """
     Set up logging with rotation based on file size.
-    
+
     Parameters:
-    - log_folder: Folder path of the log folder.
-    - log_file_name: Name of the log file.
-    - max_size: Size limit (in bytes) for the log file.
-    - is_log_update: 0 if log updates not needed, 1 if log updates needed.
+    - log_folder        : Folder path of the log folder.
+    - log_file_name     : Name of the log file.
+    - max_size          : Size limit (in bytes) for the log file.
+    - num_of_backups    : set limit on how many log files (aka backups) to be created. This is related to the setting in RotatingFileHandler where older backups will have the extensions updated with sequential number, e.g. '.csv.1', '.csv.2' etc.
+    - is_log_update     : 0 if log updates not needed, 1 if log updates needed.
+    - is_debug          : to toggle if there is a need for logging files to show debug type. Turning this off (i.e. setting to False) can help with conserving file size.
     """
-    
-    execute_key = datetime.datetime.now( ).strftime( "%Y%m%d-%H%M-%S" ) + "_" + random_string( 5 )
+
+    timestamp_0 = datetime.datetime.now( )
+    execute_key = f"""{timestamp_0.strftime( "%Y%m%d-%H%M-%S" )}_{random_string( 5 )}"""
     pic         = os.getlogin( )
-    timestamp_0 = datetime.datetime.now( ).strftime( "%Y-%m-%d" )
-    log_format  = ".csv"
+    timestamp_1 = timestamp_0.strftime( "%Y-%m-%d %H%M" )
+    log_format  = "csv"
 
     # Define the base file name and path
-    base_log_file = Path( log_folder, f"""python_logs_{timestamp_0}_{log_file_name}{log_format}""" )
-    
+    base_log_file = Path( log_folder, f"""python_logs_{timestamp_1}__{log_file_name}.{log_format}""" )
+
     # Create a new log file if it does not exist
     if not os.path.isfile( base_log_file ):
         with open( base_log_file, 'a+', encoding = 'utf-8' ) as csv_file:
@@ -198,13 +211,13 @@ def log_setup_v2( log_folder, log_file_name, max_size = 1024 * 1024, is_log_upda
         """Configure logging to use the given log file."""
         logger          = logging.getLogger( "" )
         logger.setLevel( logging.DEBUG )
-        file_handler    = logging.FileHandler( log_file )
-        file_handler.setLevel( logging.DEBUG )
+        file_handler    = RotatingFileHandler( log_file, maxBytes = max_size, backupCount = num_of_backups )
+        file_handler.setLevel( logging.DEBUG if is_debug else logging.INFO )
         formatter       = logging.Formatter( f"""{pic}|{log_file_name}|{execute_key}|%(levelname)s|%(asctime)s|%(message)s""" )
         file_handler.setFormatter( formatter )
         logger.addHandler( file_handler )
         remove_blank_lines( log_file )
-    
+
     def remove_blank_lines( file_path ):
         """Remove blank lines from the log file."""
         with open( file_path, 'r', encoding = 'utf-8' ) as file:
@@ -213,16 +226,11 @@ def log_setup_v2( log_folder, log_file_name, max_size = 1024 * 1024, is_log_upda
             file.writelines( line for line in lines if line.strip( ) )
 
     # Check file size and create new file if necessary
-    log_file    = base_log_file
-    file_count  = 1
-    while get_file_size( log_file ) >= max_size:
-        file_count += 1
-        log_file = base_log_file.with_name( f"""{base_log_file.stem}_{file_count}{log_format}""" )
 
     # Open the log file and set up logging
-    open_file( log_file )
+    open_file( base_log_file )
     time.sleep( 0.5 )
-    setup_logging( log_file )
+    setup_logging( base_log_file )
 
     if is_log_update == 0:
         pass
