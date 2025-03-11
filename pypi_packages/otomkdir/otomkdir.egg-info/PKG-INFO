@@ -1,12 +1,10 @@
 Metadata-Version: 2.1
 Name: otomkdir
-Version: 0.0.1.13
+Version: 0.1.0
 Summary: to automate creation of folders and subfolders
 Author: mose_tucker_0159
 Author-email: mose.tucker.0159@gmail.com
-License: UNKNOWN
 Keywords: python
-Platform: UNKNOWN
 Classifier: Development Status :: 1 - Planning
 Classifier: Intended Audience :: End Users/Desktop
 Classifier: Programming Language :: Python :: 3
@@ -36,5 +34,3 @@ mose_tucker_0159 -- mose.tucker.0159@gmail.com
 
 ## License
 [MIT]( https://choosealicense.com/licenses/mit )
-
-

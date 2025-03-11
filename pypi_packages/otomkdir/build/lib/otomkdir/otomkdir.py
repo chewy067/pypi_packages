@@ -1,36 +1,40 @@
 import platform
 import os
 from pathlib import Path
+from typing import Optional
 
 
 ##DETECT OPERATING SYSTEM
 if platform.system( ).lower( ) == "windows":
-    default_path = Path( os.environ[ 'USERPROFILE' ], "Desktop" )
-    default_driver = "C"
-elif platform.system( ).lower( ) == "darwin":
-    default_path = Path( os.environ[ 'HOME' ], "Desktop" )
-    default_driver = Path( os.environ[ 'HOME' ] )
+    default_path    = Path( os.environ[ 'USERPROFILE' ], "Desktop" )
+    default_driver  = "C"
+elif ( platform.system( ).lower( ) == "darwin" ) or ( platform.system( ).lower( ) == "linux" ):
+    default_path    = Path( os.environ[ 'HOME' ], "Desktop" )
+    default_driver  = Path( os.environ[ 'HOME' ] )
 else:
     pass
 
 
 
 def auto_create_folder(
-     default_path = default_path
-    , folder_extend = "task_list"
-    , subfolder_extend = None
+     default_path       : str               = default_path
+    , folder_extend     : str               = "task_list"
+    , subfolder_extend  : Optional[ str ]   = None
 ):
     """
-    default_path : only for Windows path
-    folder_extend : set folder names
-    subfolder_extend : set subfolder names
+    ## OBJECTIVE
+    * To create folders/subfolders based on an existing folder path.
+    ## INPUT VARIABLES
+    * default_path : Refers to the main folder path.
+    * folder_extend : Refers to the subfolder we want to create after default_path.
+    * subfolder_extend : Refers to the sub-subfolder we want to create after folder_extend, if needed.
     """
 
     default_path = Path( default_path )
 
     if platform.system( ).lower( ) == "windows":
         default_list = str( default_path ).split( "\\" )
-    elif platform.system( ).lower( ) == "darwin":
+    elif ( platform.system( ).lower( ) == "darwin" ) or ( platform.system( ).lower( ) == "linux" ):
         default_list = str( default_path ).split( "/" )
     else:
         pass
@@ -50,7 +54,7 @@ def auto_create_folder(
 
     if platform.system( ).lower( ) == "windows":
         folder_list = str( folder_path ).split( "\\" )
-    elif platform.system( ).lower( ) == "darwin":
+    elif ( platform.system( ).lower( ) == "darwin" ) or ( platform.system( ).lower( ) == "linux" ):
         folder_list = str( folder_path ).split( "/" )
     else:
         pass
@@ -83,26 +87,29 @@ def auto_create_folder(
 
 
 def auto_create_folder_2(
-     driver_name = default_driver
-    , folder_extend = "task_list"
-    , subfolder_extend = None
+     driver_name        : str               = default_driver
+    , folder_extend     : str               = "task_list"
+    , subfolder_extend  : Optional[ str ]   = None
 ):
     """
-    driver_name : determine driver name, i.e. C drive or D drive, etc
-    folder_extend : set folder names
-    subfolder_extend : set subfolder names
+    ## OBJECTIVE
+    * To create folders/subfolders specifying drive names, if applicable.
+    ## VARIABLE INPUT
+    * driver_name : Refers to the drive name, i.e. C drive or D drive in Windows. Otherwise just specify just specify the directory for non-Windows.
+    * folder_extend : Refers to the subfolder we want to create after default_path.
+    * subfolder_extend : Refers to the sub-subfolder we want to create after folder_extend, if needed.
     """
 
     if platform.system( ).lower( ) == "windows":
         default_path = Path( driver_name + ":/" )
-    elif platform.system( ).lower( ) == "darwin":
+    elif ( platform.system( ).lower( ) == "darwin" ) or ( platform.system( ).lower( ) == "linux" ):
         default_path = Path( driver_name )
     else:
         pass
 
     if platform.system( ).lower( ) == "windows":
         default_list = str( default_path ).split( "\\" )
-    elif platform.system( ).lower( ) == "darwin":
+    elif ( platform.system( ).lower( ) == "darwin" ) or ( platform.system( ).lower( ) == "linux" ):
         default_list = str( default_path ).split( "/" )
     else:
         pass
@@ -122,7 +129,7 @@ def auto_create_folder_2(
 
     if platform.system( ).lower( ) == "windows":
         folder_list = str( folder_path ).split( "\\" )
-    elif platform.system( ).lower( ) == "darwin":
+    elif ( platform.system( ).lower( ) == "darwin" ) or ( platform.system( ).lower( ) == "linux" ):
         folder_list = str( folder_path ).split( "/" )
     else:
         pass
