@@ -9,12 +9,12 @@ from typing import Optional
 
 if platform.system( ).lower( ) == "windows":
     user_path = os.environ[ "USERPROFILE" ]
-elif platform.system( ).lower( ) == "darwin":
+elif ( platform.system( ).lower( ) == "darwin") or ( platform.system( ).lower( ) == "linux" ):
     user_path = os.environ[ "HOME" ]
 
-default_folder = Path( user_path, "Downloads" )
-storage_folder = Path( user_path, "Desktop/carkass" )
-storage_file = Path( storage_folder, "saccarst.txt" )
+default_folder  = Path( user_path, "Downloads" )
+storage_folder  = Path( user_path, "Desktop/carkass" )
+storage_file    = Path( storage_folder, "saccarst.txt" )
 
 
 def setup_enkrypt(

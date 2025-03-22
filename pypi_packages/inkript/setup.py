@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 import codecs
 import os
 
-version = "0.0.3"
+version = "0.0.4"
 
 description = "to create keys to encrypt and decrypt files"
 
