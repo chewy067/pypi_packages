@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 import codecs
 import os
 
-version = "0.1.0"
+version = "0.0.1.6"
 
 description = "to automate creation of folders and subfolders"
 
@@ -11,24 +11,22 @@ with open( "README.md", "r" ) as f:
 
 # setting up
 setup(
-     name               = "otomkdir"
-    , version           = version
-    , author            = "mose_tucker_0159"
-    , author_email      = "mose.tucker.0159@gmail.com"
-    , description       = description
-    , long_description  = long_description
-    , long_description_content_type \
-                        = "text/markdown"
-    , packages          = find_packages( )
-    , install_requires  = [
+     name = "otomkdir"
+    , version = version
+    , author = "mose_tucker_0159"
+    , author_email = "mose.tucker.0159@gmail.com"
+    , description = description
+    , long_description = long_description
+    , long_description_content_type = "text/markdown"
+    , packages = find_packages( )
+    , install_requires = [
 
       ]
     , keywords = [ "python" ]
     , classifiers = [
              "Development Status :: 1 - Planning"
-            , "Intended Audience :: End Users/Desktop"
-            , "Programming Language :: Python :: 3"
-            , "Operating System :: Microsoft :: Windows"
-            , "Operating System :: MacOS"
+            ,  "Intended Audience :: End Users/Desktop"
+            ,  "Programming Language :: Python :: 3"
+            ,  "Operating System :: Microsoft :: Windows"
       ]
 )

@@ -1,32 +1,21 @@
-import platform
 import os
 from cryptography.fernet import Fernet
 from pathlib import Path
 from tkinter import messagebox
 import time
-from typing import Optional
 
 
-if platform.system( ).lower( ) == "windows":
-    user_path = os.environ[ "USERPROFILE" ]
-elif ( platform.system( ).lower( ) == "darwin") or ( platform.system( ).lower( ) == "linux" ):
-    user_path = os.environ[ "HOME" ]
-
-default_folder  = Path( user_path, "Downloads" )
-storage_folder  = Path( user_path, "Desktop/carkass" )
-storage_file    = Path( storage_folder, "saccarst.txt" )
+user_path = os.environ[ "USERPROFILE" ]
+default_folder = Path( user_path, "Downloads" )
+storage_folder = Path( user_path, "Desktop/carkass" )
+storage_file = Path( storage_folder, "saccarst.txt" )
 
 
-def setup_enkrypt(
-         user_defined_actual_storage_path : str
-    ) -> None:
+def setup_enkrypt( user_defined_actual_storage_path ):
     """
-    ## OBJECTIVE
-    * To set up folders to facilitate the path references for encryption and decryption processes.
-    ## INPUT VARIABLES
-    * user_define_actual_storage_path : storage_folder variable is used to store the ACTUAL path where the KEY file and the ENCRYPTED files will be stored. The path is to be determined by the user and only the user will know where the files are stored. Full file is needed and use "forward slash", i.e. "/" and NOT backslash ("\").
-    ## ADDITIONAL NOTES
-    * Once actual file path has been established, 2 default folders will be created: [1] eyks : to store the ".key" files (aka "KEY" folder), [2] erost : to store the encrypted files
+    user_define_actual_storage_path : storage_folder variable is used to store the ACTUAL path where the KEY file and the ENCRYPTED files will be stored. The path is to be determined by the user and only the user will know where the files are stored. Full file is needed and use "forward slash", i.e. "/" and NOT backslash ("\").
+
+    SIDE NOTE: once actual file path has been established, 2 default folders will be created: [1] eyks : to store the ".key" files, [2] erost : to store the encrypted files
     """
 
     ##create storage_file to store actual path (user-defined)
@@ -62,16 +51,11 @@ def setup_enkrypt(
 
 
 
-def gen_rand_key(
-         key_name : str
-    ) -> None:
+def gen_rand_key( key_name ):
     """
-    ## OBJECTIVE
-    * To generate random key for encryption and decryption processes.
-    ## INPUT VARIABLES
-    * key_name : Assign a name to the key. File format not needed as default is already set as ".key"
-    ## ADDITIONAL NOTES
-    * Once the file with key is generated and AFTER the key has been used to encrypt the original file, move this ".key" file from default_folder to the designated "KEY" folder set in storage_folder. Refer to storage_folder variable.
+    key_name : Assign a name to the key. File format not needed as default is already set as ".key"
+
+    SIDE NOTE: once file with key is generated and AFTER the key has been used to encrypt the original file, move this key file from default_folder to the designated folder set in storage_folder. Refer to storage_folder variable
     """
 
     key = Fernet.generate_key( )
@@ -88,18 +72,11 @@ def gen_rand_key(
 
 
 
-def file_encrypt(
-         key_name       : str
-        , file_name     : str
-        , file_format   : str
-    ) -> None:
+def file_encrypt( key_name, file_name, file_format ):
     """
-    ## OBJECTIVE
-    * To encrypt credentials.
-    ## INPUT VARIABLES
-    * key_name : Specify name to the key file previously created and saved. File format not needed as default is already set as ".key".
-    * file_name : Specify name of the original file that needs to be encrypted. File format not needed.
-    * file_format : Specify file format of the original file that needs to be encrypted.
+    key_name : Specify name to the key file previously created and saved. File format not needed as default is already set as ".key".
+    file_name : Specify name of the original file that needs to be encrypted. File format not needed.
+    file_format : Specify file format of the original file that needs to be encrypted.
     """
 
     ##read key from file
@@ -128,20 +105,11 @@ def file_encrypt(
 
 
 
-def file_decrypt(
-         key_name       : str
-        , encrypt_file  : str
-        , file_format   : str
-        , delimiter     : Optional[ str ] = ";"
-    ) -> str:
+def file_decrypt( key_name, encrypt_file, file_format ):
     """
-    ## OBJECTIVE
-    * To decrypt credentials.
-    ## INPUT VARIABLES
-    * key_name : Specify name to the key file previously created and saved. File format not needed as default is already set as ".key".
-    * encrypt_file : Specify name of the encrypted file. File format not needed.
-    * file_format : Specify file format of the encrypted file.
-    * delimiter : Specify delimiter if split-string is needed after string decoding. Otherwise, specify as None if split-string is not needed.
+    key_name : Specify name to the key file previously created and saved. File format not needed as default is already set as ".key".
+    encrypt_file : Specify name of the encrypted file. File format not needed.
+    file_format : Specify file format of the encrypted file.
     """
 
     ##specify location that store keys and encrypted files
@@ -168,6 +136,5 @@ def file_decrypt(
         read_encrypt = encrypted_file.read( )
 
     decrypted = fernet.decrypt( bytes( read_encrypt, 'utf-8' ) )
-    decoded_str_raw = decrypted.decode( 'utf-8' )
-    decoded_str = decoded_str_raw.split( ';' ) if delimiter else decoded_str_raw
+    decoded_str = decrypted.decode( 'utf-8' ).split( ';' )
     return decoded_str
