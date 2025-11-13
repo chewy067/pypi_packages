@@ -18,9 +18,9 @@ from pysinewave import SineWave
 ##<<beeping notifications ===================
 def base_beep( frequency, duration, pause = 0.3 ):
     sinewave = SineWave( pitch = frequency )
-    sinewave.play( )
+    sinewave.play()
     time.sleep( duration )
-    sinewave.stop( )
+    sinewave.stop()
 
     time.sleep( pause )
 
@@ -71,12 +71,12 @@ def remove_blank_lines( log_file ):
     output = ""
     with open( log_file ) as lines:
         for line in lines:
-            if not line.isspace( ):
+            if not line.isspace():
                 output += line
 
     lines = open( log_file, 'w' )
     lines.write( output )
-    lines.close( )
+    lines.close()
 
 
 def open_file( filename ):
@@ -105,9 +105,9 @@ def log_setup( log_folder, log_file_name, is_log_update = 1, is_log_update_1 = 0
     is_log_update_1 / 2 : 0 or 1 -- use only if there is another log with different format.
     """
 
-    execute_key = datetime.datetime.now( ).strftime( "%Y%m%d-%H%M-%S" ) + "_" + str( random_string( 5 ) )
-    pic = os.getlogin( )
-    timestamp_0 = datetime.datetime.now( ).strftime( "%Y-%m-%d" )
+    execute_key = datetime.datetime.now().strftime( "%Y%m%d-%H%M-%S" ) + "_" + str( random_string( 5 ) )
+    pic = os.getlogin()
+    timestamp_0 = datetime.datetime.now().strftime( "%Y-%m-%d" )
     log_format = ".csv"
 
 
@@ -162,12 +162,14 @@ def log_setup( log_folder, log_file_name, is_log_update = 1, is_log_update_1 = 0
 def log_setup_v2(
          log_folder         : str
         , log_file_name     : str
-        , max_size          : float   = 1024 * 1024
-        , num_of_backups    : int     = 50
-        , is_log_update     : int     = 1
-        , is_debug          : bool    = True
-        , is_log_update_1   : int     = 0
-        , is_log_update_2   : int     = 0
+        , overwrite_file_timestamp \
+                            : Optional[ str ]   = None
+        , max_size          : float             = 1024 * 1024
+        , num_of_backups    : int               = 50
+        , is_log_update     : int               = 1
+        , is_debug          : bool              = True
+        , is_log_update_1   : int               = 0
+        , is_log_update_2   : int               = 0
     ):
     """
     ### OBJECTIVE
@@ -180,11 +182,11 @@ def log_setup_v2(
     * is_log_update: 0 if log updates not needed, 1 if log updates needed.
     * is_debug: to toggle if there is a need for logging files to show debug type. Turning this off (i.e. setting to False) can help with conserving file size.
     """
-
-    timestamp_0 = datetime.datetime.now( )
-    execute_key = f"""{timestamp_0.strftime( "%Y%m%d-%H%M-%S" )}_{random_string( 5 )}"""
-    pic         = os.getlogin( )
-    timestamp_1 = timestamp_0.strftime( "%Y-%m-%d %H%M" )
+    timestamp00 = datetime.datetime.now()
+    timestamp_0 = timestamp00.strftime( "%Y%m%d-%H%M-%S" )
+    timestamp_1 = overwrite_file_timestamp if overwrite_file_timestamp else timestamp00.strftime( "%Y-%m-%d %H%M" )
+    execute_key = f"""{timestamp_0}_{random_string( 5 )}"""
+    pic         = os.getlogin()
     log_format  = "csv"
 
     # Define the base file name and path
@@ -219,9 +221,9 @@ def log_setup_v2(
     def remove_blank_lines( file_path ):
         """Remove blank lines from the log file."""
         with open( file_path, 'r', encoding = 'utf-8' ) as file:
-            lines = file.readlines( )
+            lines = file.readlines()
         with open( file_path, 'w', encoding = 'utf-8' ) as file:
-            file.writelines( line for line in lines if line.strip( ) )
+            file.writelines( line for line in lines if line.strip() )
 
     # Check file size and create new file if necessary
 
@@ -237,22 +239,22 @@ def log_setup_v2(
 
 
 ##<<start log_comments ===================
-def log_script_start( ):
+def log_script_start():
     print_comment = "script started"
     logging.info( print_comment )
-    print( f"""{datetime.datetime.now( )} || {print_comment}""" )
+    print( f"""{datetime.datetime.now()} || {print_comment}""" )
 
 
 def log_subscript_start( tagging, print_comment ):
     full_comment = f"""subscript started: {tagging}:-- {print_comment}"""
     logging.info( full_comment )
-    print( f"""{datetime.datetime.now( )} || {full_comment}""" )
+    print( f"""{datetime.datetime.now()} || {full_comment}""" )
 
 
 def log_subscript_finish( tagging, print_comment, with_beep = 0 ):
     full_comment = f"""subscript finished: {tagging}:-- {print_comment}"""
     logging.info( full_comment )
-    print( f"""{datetime.datetime.now( )} || {full_comment}""" )
+    print( f"""{datetime.datetime.now()} || {full_comment}""" )
 
     if with_beep == 1:
         done_status_beep( 5, 10, 0.15 )
@@ -269,7 +271,7 @@ def log_script_finish( with_beep = 1 ):
     else:
         pass
 
-    print( f"""{datetime.datetime.now( )} || {print_comment}""" )
+    print( f"""{datetime.datetime.now()} || {print_comment}""" )
 
 
 def log_exception( exception, with_beep = 1 ):
@@ -280,7 +282,7 @@ def log_exception( exception, with_beep = 1 ):
 
     error_msg = f"""error encountered: {str( str( exception ).encode( "utf-8" ).decode( "utf-8" ) )}"""
     logging.debug( error_msg )
-    print( f"""{datetime.datetime.now( )} || {error_msg}""" )
+    print( f"""{datetime.datetime.now()} || {error_msg}""" )
 ##end log_comments>> ===================
 
 
