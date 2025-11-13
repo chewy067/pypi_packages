@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 import codecs
 import os
 
-version     = "0.2.3"
+version     = "0.2.4"
 description = "To generate a log tracking mechanism that can be customised."
 
 with open( "README.md", "r" ) as f:
