@@ -1,7 +1,9 @@
+import sys
+import os
 import random
 import string
 import logging
-import os
+from logging.handlers import RotatingFileHandler
 from pathlib import Path
 import time
 import datetime
@@ -77,6 +79,22 @@ def remove_blank_lines( log_file ):
     lines.close( )
 
 
+def open_file( filename ):
+    if sys.platform == "win32":
+        os.startfile( filename )
+    else:
+        if sys.platform == "darwin":
+            opener = "open"
+        else:
+            opener = "xdg-open"
+        subprocess.call( [opener, filename ] )
+
+
+def get_file_size( file_path ):
+    """Get the size of a file in bytes"""
+    return os.path.getsize( file_path ) if os.path.isfile( file_path ) else 0
+
+
 
 def log_setup( log_folder, log_file_name, is_log_update = 1, is_log_update_1 = 0, is_log_update_2 = 0 ):
 
@@ -87,7 +105,6 @@ def log_setup( log_folder, log_file_name, is_log_update = 1, is_log_update_1 = 0
     is_log_update_1 / 2 : 0 or 1 -- use only if there is another log with different format.
     """
 
-    # var_file_name = os.path.basename( __file__ )
     execute_key = datetime.datetime.now( ).strftime( "%Y%m%d-%H%M-%S" ) + "_" + str( random_string( 5 ) )
     pic = os.getlogin( )
     timestamp_0 = datetime.datetime.now( ).strftime( "%Y-%m-%d" )
@@ -115,7 +132,8 @@ def log_setup( log_folder, log_file_name, is_log_update = 1, is_log_update_1 = 0
 
 
         ##open log file
-        os.startfile( log_file )
+        # os.startfile( log_file )
+        open_file( log_file )
         time.sleep( 0.5 )
 
 
@@ -135,7 +153,6 @@ def log_setup( log_folder, log_file_name, is_log_update = 1, is_log_update_1 = 0
         )
         logging1.setFormatter( formatter1 )
         logger1.addHandler( logging1 )
-        var_print_comment = ""
         remove_blank_lines( log_file )
 
     elif is_log_update == 0:
@@ -219,21 +236,28 @@ def log_setup_v2(
 
 
 
-##<< log_comments ===================
+##<<start log_comments ===================
 def log_script_start( ):
     print_comment = "script started"
     logging.info( print_comment )
-    print( print_comment )
+    print( f"""{datetime.datetime.now( )} || {print_comment}""" )
 
 
 def log_subscript_start( tagging, print_comment ):
-    logging.info( "subscript started: " + tagging + ":-- " + print_comment )
-    print( "subscript started: " + tagging + ":-- " + print_comment )
+    full_comment = f"""subscript started: {tagging}:-- {print_comment}"""
+    logging.info( full_comment )
+    print( f"""{datetime.datetime.now( )} || {full_comment}""" )
 
 
-def log_subscript_finish( tagging, print_comment ):
-    logging.info( "subscript finished: " + tagging + ":-- " + print_comment )
-    print( "subscript finished: " + tagging + ":-- " + print_comment )
+def log_subscript_finish( tagging, print_comment, with_beep = 0 ):
+    full_comment = f"""subscript finished: {tagging}:-- {print_comment}"""
+    logging.info( full_comment )
+    print( f"""{datetime.datetime.now( )} || {full_comment}""" )
+
+    if with_beep == 1:
+        done_status_beep( 5, 10, 0.15 )
+    else:
+        pass
 
 
 def log_script_finish( with_beep = 1 ):
@@ -241,32 +265,33 @@ def log_script_finish( with_beep = 1 ):
     logging.info( print_comment )
 
     if with_beep == 1:
-        bips.bip_notifs.done_status_beep( )
+        success_beep( 10, 0.15 )
     else:
         pass
 
-    print( print_comment )
+    print( f"""{datetime.datetime.now( )} || {print_comment}""" )
 
 
 def log_exception( exception, with_beep = 1 ):
     if with_beep == 1:
-        bips.bip_notifs.error_beep( )
+        error_beep( 12, 0.15 )
     else:
         pass
 
-    logging.debug( "error encountered: " + str( str( exception ).encode( "utf-8" ).decode( "utf-8" ) ) )
-    print( "error encountered: " + str( str( exception ).encode( "utf-8" ).decode( "utf-8" ) ) )
+    error_msg = f"""error encountered: {str( str( exception ).encode( "utf-8" ).decode( "utf-8" ) )}"""
+    logging.debug( error_msg )
+    print( f"""{datetime.datetime.now( )} || {error_msg}""" )
 ##end log_comments>> ===================
 
 
 
-##<< log_refresh_update_comments ==========================
+##<<start log_refresh_update_comments ==========================
 def update_log_status_1( is_log_update_1, is_succeed, tagging ):
     if is_log_update_1 == 1:
         if is_succeed == 1:
             logging.info( "update_log_status_1:" + tagging + ":-- " + "ok" )
 
-        elif var_is_succeed == 0:
+        elif is_succeed == 0:
             logging.debug( "update_log_status_1:" + tagging + ":-- " + "failed" )
 
     elif is_log_update_1 == 0:
@@ -278,7 +303,7 @@ def update_log_status_2( is_log_update_2, is_succeed, tagging ):
         if is_succeed == 1:
             logging.info( "update_log_status_2:" + tagging + ":-- " + "ok" )
 
-        elif var_is_succeed == 0:
+        elif is_succeed == 0:
             logging.debug( "update_log_status_2:" + tagging + ":-- " + "failed" )
 
     elif is_log_update_2 == 0:
