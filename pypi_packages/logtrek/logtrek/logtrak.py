@@ -160,7 +160,7 @@ def log_setup( log_folder, log_file_name, is_log_update = 1, is_log_update_1 = 0
 
 
 def log_setup_v2(
-         log_folder         : str
+        log_folder          : str
         , log_file_name     : str
         , overwrite_file_timestamp \
                             : Optional[ str ]   = None
@@ -182,31 +182,6 @@ def log_setup_v2(
     * is_log_update: 0 if log updates not needed, 1 if log updates needed.
     * is_debug: to toggle if there is a need for logging files to show debug type. Turning this off (i.e. setting to False) can help with conserving file size.
     """
-    timestamp00 = datetime.datetime.now()
-    timestamp_0 = timestamp00.strftime( "%Y%m%d-%H%M-%S" )
-    timestamp_1 = overwrite_file_timestamp if overwrite_file_timestamp else timestamp00.strftime( "%Y-%m-%d %H%M" )
-    execute_key = f"""{timestamp_0}_{random_string( 5 )}"""
-    pic         = os.getlogin()
-    log_format  = "csv"
-
-    # Define the base file name and path
-    base_log_file = Path( log_folder, f"""python_logs_{timestamp_1}__{log_file_name}.{log_format}""" )
-
-    # Create a new log file if it does not exist
-    if not os.path.isfile( base_log_file ):
-        with open( base_log_file, 'a+', encoding = 'utf-8' ) as csv_file:
-            csv_writer = csv.writer( csv_file, delimiter = '|' )
-            csv_writer.writerow(
-                [
-                     "pic_name"
-                    , "file_name"
-                    , "script_exec_key"
-                    , "level_name"
-                    , "timestamp"
-                    , "log_message"
-                ]
-            )
-
     def setup_logging( log_file ):
         """Configure logging to use the given log file."""
         logger          = logging.getLogger( "" )
@@ -225,10 +200,31 @@ def log_setup_v2(
         with open( file_path, 'w', encoding = 'utf-8' ) as file:
             file.writelines( line for line in lines if line.strip() )
 
-    # Check file size and create new file if necessary
 
-    # Open the log file and set up logging
+    timestamp00 = datetime.datetime.now()
+    timestamp_0 = timestamp00.strftime( "%Y%m%d-%H%M-%S" )
+    timestamp_1 = overwrite_file_timestamp if overwrite_file_timestamp else timestamp00.strftime( "%Y-%m-%d %H%M" )
+    execute_key = f"""{timestamp_0}_{random_string( 5 )}"""
+    pic         = os.getlogin()
+    log_format  = "csv"
+
+    # Define the base file name and path
+    base_log_file = Path( log_folder, f"""python_logs_{timestamp_1}__{log_file_name}.{log_format}""" )
+
+    # Create a new log file if it does not exist
     if not Path( base_log_file ).exists():
+        with open( base_log_file, 'a+', encoding = 'utf-8' ) as csv_file:
+            csv_writer = csv.writer( csv_file, delimiter = '|' )
+            csv_writer.writerow(
+                [
+                    "pic_name"
+                    , "file_name"
+                    , "script_exec_key"
+                    , "level_name"
+                    , "timestamp"
+                    , "log_message"
+                ]
+            )
         open_file( base_log_file )
         time.sleep( 0.5 )
         setup_logging( base_log_file )
@@ -236,7 +232,6 @@ def log_setup_v2(
     if is_log_update == 0:
         pass
 ##end log tracking>> ===================
-
 
 
 ##<<start log_comments ===================
