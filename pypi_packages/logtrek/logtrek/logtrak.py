@@ -228,9 +228,10 @@ def log_setup_v2(
     # Check file size and create new file if necessary
 
     # Open the log file and set up logging
-    open_file( base_log_file )
-    time.sleep( 0.5 )
-    setup_logging( base_log_file )
+    if not Path( base_log_file ).exists():
+        open_file( base_log_file )
+        time.sleep( 0.5 )
+        setup_logging( base_log_file )
 
     if is_log_update == 0:
         pass
